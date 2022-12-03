@@ -150,6 +150,7 @@
     <ClInclude Include="src\day01.h" />
     <ClInclude Include="src\day02.h" />
     <ClInclude Include="src\day03.h" />
+    <ClInclude Include="src\day04.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
