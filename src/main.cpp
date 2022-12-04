@@ -4,7 +4,7 @@
 #include <fstream>
 
 #define SEE_ALL_DAYS_RESULT 0
-#define CURRENT_DAY 3
+#define CURRENT_DAY 4
 
 template<int day>
 struct NeedShowDayResults
