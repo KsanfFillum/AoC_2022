@@ -47,12 +47,22 @@ void RunDay()
 	}
 }
 
-int main()
+template<int lastDay>
+void RunAllDays()
+{
+	RunAllDays<lastDay - 1>();
+	RunDay<lastDay>();
+}
+
+template<>
+void RunAllDays<1>()
 {
 	RunDay<1>();
-	RunDay<2>();
-	RunDay<3>();
-	RunDay<4>();
+}
+
+int main()
+{
+	RunAllDays<CURRENT_DAY>();
 
 	std::cin.get();
 }

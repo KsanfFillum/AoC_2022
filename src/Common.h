@@ -19,7 +19,8 @@ std::string PuzzleApproach<day, puzzle>::RunTest(std::istream& stream)
 	NOT_IMPLEMENTED_PUZZLE;
 }
 
-#include "day01.h"
-#include "day02.h"
-#include "day03.h"
-#include "day04.h"
+#include "days/day01.h"
+#include "days/day02.h"
+#include "days/day03.h"
+#include "days/day04.h"
+#include "days/day05.h"
