@@ -1,6 +1,7 @@
 #pragma once
 
 #define NOT_IMPLEMENTED_PUZZLE return "Not Implemented"
+#define INVALID_INPUT return "Invalid Input or Processing"
 
 #include <iostream>
 
