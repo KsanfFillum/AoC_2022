@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Helpers.h"
 
 namespace Day10
 {
@@ -14,24 +15,6 @@ namespace Day10
 	{
 		virtual void Init(std::string line) = 0;
 		virtual FunctionResult Tick(int& deviceRegister) = 0;
-	};
-
-	template<typename T>
-	struct ScopeSetter
-	{
-		ScopeSetter(T& place, T value)
-			: Place(place), Value(value)
-		{
-		}
-
-		~ScopeSetter()
-		{
-			Place = Value;
-		}
-
-	private:
-		T& Place;
-		T Value;
 	};
 
 	struct Addx : public Function

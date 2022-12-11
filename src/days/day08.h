@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Helpers.h"
 #include <functional>
 
 namespace Day08
@@ -9,22 +10,6 @@ namespace Day08
 	constexpr char EastBit	= 0b0010;
 	constexpr char SouthBit	= 0b0100;
 	constexpr char WestBit	= 0b1000;
-
-	struct Vector2
-	{
-		Vector2(size_t x, size_t y)
-			: X(x), Y(y)
-		{
-		}
-
-		Vector2()
-			: Vector2(0, 0)
-		{
-		}
-
-		size_t X;
-		size_t Y;
-	};
 
 	struct Tree
 	{

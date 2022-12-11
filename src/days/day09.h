@@ -1,39 +1,10 @@
 #pragma once
 
 #include "Common.h"
+#include "Helpers.h"
 
 namespace Day09
 {
-	struct Vector2
-	{
-		Vector2() : Vector2(0, 0)
-		{
-		}
-
-		Vector2(int x, int y)
-			: X(x), Y(y)
-		{
-		}
-
-		int X;
-		int Y;
-	};
-
-	Vector2 operator+(const Vector2& lhv, const Vector2& rhv)
-	{
-		return Vector2(lhv.X + rhv.X, lhv.Y + rhv.Y);
-	}
-
-	Vector2 operator-(const Vector2& lhv, const Vector2& rhv)
-	{
-		return Vector2(lhv.X - rhv.X, lhv.Y - rhv.Y);
-	}
-
-	Vector2 operator*(const Vector2& lhv, int rhv)
-	{
-		return Vector2(lhv.X * rhv, lhv.Y * rhv);
-	}
-
 	// allow only numbers [0; 65535] for 4byte-int
 	struct VectorComparator
 	{

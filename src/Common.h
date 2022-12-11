@@ -30,3 +30,4 @@ std::string PuzzleApproach<day, puzzle>::RunTest(std::istream& stream)
 #include "days/day08.h"
 #include "days/day09.h"
 #include "days/day10.h"
+#include "days/day11.h"
