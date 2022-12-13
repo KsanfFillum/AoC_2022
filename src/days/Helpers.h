@@ -97,3 +97,63 @@ Vector2 operator*(const Vector2& lhv, int rhv)
 {
 	return Vector2(lhv.X * rhv, lhv.Y * rhv);
 }
+
+bool operator ==(const Vector2& lhv, const Vector2& rhv)
+{
+	return lhv.X == rhv.X && lhv.Y == rhv.Y;
+}
+
+bool operator !=(const Vector2& lhv, const Vector2& rhv)
+{
+	return lhv.X != rhv.X || lhv.Y != rhv.Y;
+}
+
+// allow only numbers [0; 65535] for 4byte-int
+struct VectorComparator
+{
+	inline bool operator()(const Vector2& lhv, const Vector2 rhv) const
+	{
+		constexpr size_t intSize = sizeof(int);
+		return ((lhv.X << intSize * 4) + lhv.Y) < ((rhv.X << intSize * 4) + rhv.Y);
+	}
+};
+
+// -------------Heap-----------------
+
+template<typename T, typename TPred = std::less<>>
+class Heap
+{
+public:
+	template<typename TIter>
+	void insert(TIter begin, TIter end) 
+	{
+		Container.insert(Container.end(), begin, end);
+		std::make_heap(Container.begin(), Container.end(), TPred());
+	}
+	
+	void push(const T& value)
+	{ 
+		Container.push_back(value); 
+		std::push_heap(Container.begin(), Container.end(), TPred());
+	}
+	
+	T pop() 
+	{ 
+		T value = Container.front(); 
+		std::pop_heap(Container.begin(), Container.end(), TPred());
+		Container.pop_back();
+		return value; 
+	}
+
+	T peek() const
+	{
+		return Container.front();
+	}
+
+	size_t size() const { return Container.size(); }
+
+
+private:
+	std::vector<T> Container;
+	
+};

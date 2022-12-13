@@ -5,16 +5,6 @@
 
 namespace Day09
 {
-	// allow only numbers [0; 65535] for 4byte-int
-	struct VectorComparator
-	{
-		inline bool operator()(const Vector2& lhv, const Vector2 rhv) const
-		{
-			constexpr size_t intSize = sizeof(int);
-			return ((lhv.X << intSize * 4) + lhv.Y) < ((rhv.X << intSize * 4) + rhv.Y);
-		}
-	};
-
 	inline int Sign(int val)
 	{
 		return (0 < val) - (val < 0);
