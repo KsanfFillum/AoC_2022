@@ -3,6 +3,9 @@
 #include "Common.h"
 #include "Helpers.h"
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 10
+
 namespace Day10
 {
 	enum class FunctionResult

@@ -3,6 +3,9 @@
 #include "Common.h"
 #include "Helpers.h"
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 11
+
 namespace Day11
 {
 	using uint64 = unsigned long long;

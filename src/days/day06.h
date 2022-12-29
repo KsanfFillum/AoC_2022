@@ -3,6 +3,9 @@
 #include "Common.h"
 #include <queue>
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 6
+
 namespace Day06
 {
 	template<int rowCount>

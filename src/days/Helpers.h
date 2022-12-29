@@ -4,6 +4,37 @@
 #include <string>
 #include <sstream>
 
+inline int sign(int val)
+{
+	return (0 < val) - (val < 0);
+}
+
+std::vector<std::string> tokenize(std::string str, const char* delimeter)
+{
+	std::vector<std::string> tokenized;
+	size_t beginIndex = 0;
+	size_t endIndex = 0;
+	const size_t strLen = std::strlen(delimeter);
+
+	while (endIndex < str.size())
+	{
+		endIndex = str.find(delimeter, beginIndex);
+		if (endIndex == std::string::npos)
+		{
+			endIndex = str.size();
+		}
+
+		if (beginIndex != endIndex)
+		{
+			tokenized.push_back(str.substr(beginIndex, endIndex - beginIndex));
+		}
+		
+		beginIndex = endIndex + strLen;
+	}
+
+	return tokenized;
+}
+
 std::vector<std::string> tokenize(std::string str, char delimeter)
 {
 	std::stringstream sstream(str);

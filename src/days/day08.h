@@ -4,6 +4,9 @@
 #include "Helpers.h"
 #include <functional>
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 8
+
 namespace Day08
 {
 	constexpr char NorthBit	= 0b0001;

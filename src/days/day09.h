@@ -3,13 +3,11 @@
 #include "Common.h"
 #include "Helpers.h"
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 9
+
 namespace Day09
 {
-	inline int Sign(int val)
-	{
-		return (0 < val) - (val < 0);
-	}
-
 	template<int knotsCount>
 	std::string Approach(std::istream& stream)
 	{
@@ -43,7 +41,7 @@ namespace Day09
 					Vector2 diff = knots[i - 1] - knots[i];
 					if (std::abs(diff.X) > 1 || std::abs(diff.Y) > 1)
 					{
-						knots[i] = knots[i] + Vector2(Sign(diff.X), Sign(diff.Y));
+						knots[i] = knots[i] + Vector2(sign(diff.X), sign(diff.Y));
 					}
 				}
 

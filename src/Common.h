@@ -3,6 +3,28 @@
 #define NOT_IMPLEMENTED_PUZZLE return "Not Implemented"
 #define INVALID_INPUT return "Invalid Input or Processing"
 
+template<int day>
+struct NeedShowDayResults
+{
+#if SEE_ALL_DAYS_RESULT
+	constexpr static bool Value = true;
+#else
+	constexpr static bool Value = false;
+#endif
+};
+
+namespace RunPuzzleTraitsConstant
+{
+	constexpr char RunTest = 0b01;
+	constexpr char RunMain = 0b10;
+}
+
+template<int day>
+struct RunPuzzleTraits
+{
+	constexpr static char Value = RunPuzzleTraitsConstant::RunTest | RunPuzzleTraitsConstant::RunMain;
+};
+
 #include <iostream>
 
 template<int day, int puzzle>
@@ -32,3 +54,4 @@ std::string PuzzleApproach<day, puzzle>::RunTest(std::istream& stream)
 #include "days/day10.h"
 #include "days/day11.h"
 #include "days/day12.h"
+#include "days/day14.h"

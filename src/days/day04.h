@@ -2,6 +2,9 @@
 
 #include "Common.h"
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 4
+
 template<>
 std::string PuzzleApproach<4, 1>::RunTest(std::istream& stream)
 {

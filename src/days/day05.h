@@ -5,6 +5,9 @@
 #include <sstream>
 #include <vector>
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 5
+
 template<typename ContT>
 inline void Add(ContT& cont, char ch);
 

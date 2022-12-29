@@ -2,6 +2,9 @@
 
 #include "Common.h"
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 12
+
 namespace Day12
 {
 	using byte = char;

@@ -6,6 +6,9 @@
 #include <algorithm>
 #include <vector>
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 3
+
 template<>
 std::string PuzzleApproach<3, 1>::RunTest(std::istream& stream)
 {
@@ -18,7 +21,7 @@ std::string PuzzleApproach<3, 1>::RunTest(std::istream& stream)
 		const size_t halfIndex = line.size() / 2;
 
 		std::set<char> firstHalf = std::set<char>(line.begin(), line.begin() + halfIndex);
-		char intersectedChar;
+		char intersectedChar = '/0';
 		for (auto it = line.begin() + halfIndex; it < line.end(); ++it)
 		{
 			if (firstHalf.count(*it))

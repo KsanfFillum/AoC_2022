@@ -5,6 +5,9 @@
 #include <functional>
 #include <cassert>
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 7
+
 namespace Day07
 {
 	struct File
@@ -18,6 +21,7 @@ namespace Day07
 		Directory(std::string name, Directory* parent = nullptr)
 			: Name(name)
 			, Parent(parent)
+			, CachedSize(0)
 		{
 		}
 

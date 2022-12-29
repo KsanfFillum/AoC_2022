@@ -4,6 +4,9 @@
 #include <string>
 #include <array>
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 1
+
 void CompareAndFlush(int& bestValue, int& currentValue)
 {
 	if (currentValue > bestValue)

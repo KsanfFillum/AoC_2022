@@ -4,6 +4,10 @@
 
 #include <array>
 
+#undef CURRENT_DAY
+#define CURRENT_DAY 2
+
+
 #define ROCK 1
 #define PAPER 2
 #define SCISSORS 3
