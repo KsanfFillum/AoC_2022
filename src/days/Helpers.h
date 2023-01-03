@@ -139,6 +139,16 @@ bool operator !=(const Vector2& lhv, const Vector2& rhv)
 	return lhv.X != rhv.X || lhv.Y != rhv.Y;
 }
 
+namespace std
+{
+	string to_string(const Vector2& v)
+	{
+		char buffer[21];
+		snprintf(buffer, 21, "[%i; %i]", v.X, v.Y);
+		return buffer;
+	}
+}
+
 // allow only numbers [0; 65535] for 4byte-int
 struct VectorComparator
 {
