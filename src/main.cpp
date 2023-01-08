@@ -1,6 +1,7 @@
 #define SEE_ALL_DAYS_RESULT 0
 
 #include "Common.h"
+#include "Profiler.h"
 
 #include <iostream>
 #include <fstream>
@@ -28,18 +29,37 @@ void FormatFilename<RunPuzzleTraitsConstant::RunMain>(char* buffer, int day)
 }
 
 template<int day, int puzzle, char puzzleBit>
+constexpr std::string GetDescription()
+{
+	std::string s = puzzleBit == RunPuzzleTraitsConstant::RunMain ? "Puzzle" : "Test  ";
+	s += " [";
+	s += day < 10 ? " " : "";
+	s += std::to_string(day);
+	s += "; ";
+	s += std::to_string(puzzle);
+	s += "]";
+
+	return s;
+}
+
+Profiler GlobalProfiler;
+template<int day, int puzzle, char puzzleBit>
 void Run()
 {
 	if (RunPuzzleTraits<day>::Value & puzzleBit)
 	{
 		char filename[18];
+		
 		FormatFilename<puzzleBit>(filename, day);
 
 		std::ifstream file(filename);
 		assert(file.good());
 
+		GlobalProfiler.Start(GetDescription<day, puzzle, puzzleBit>());
 		std::string result = PuzzleApproach<day, puzzle>().RunTest(file);
-		std::cout << (puzzleBit == RunPuzzleTraitsConstant::RunMain ? "Puzzle" : "Test") << " [" << day << ";" << puzzle << "] answer: " << result << std::endl;
+		GlobalProfiler.End();
+
+		std::cout << GetDescription<day, puzzle, puzzleBit>() << " answer: " << result << std::endl;
 	}
 }
 
@@ -79,6 +99,8 @@ void RunAllDays<1>()
 int main()
 {
 	RunAllDays<CURRENT_DAY>();
+	std::cout << std::endl;
+	GlobalProfiler.Flush();
 
 	std::cin.get();
 }
