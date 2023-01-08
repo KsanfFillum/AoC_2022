@@ -21,87 +21,6 @@ namespace Day13
 		bool HasValue;
 	};
 	
-	//struct Value
-	//{
-	//	virtual Optional<int> At(int position) const = 0;
-	//	virtual size_t Size() const = 0;
-	//};
-
-	//struct Integer : public Value
-	//{
-	//	int Value;
-
-	//	virtual Optional<int> At(int position) const { return position == 0 ? Value : Optional<int>(); }
-	//	virtual size_t Size() const { return 1; }
-	//};
-
-	//struct List : public Value
-	//{
-	//	std::vector<std::shared_ptr<Value>> Values;
-
-	//	virtual Optional<int> At(int position) const { return Size() >= position ? Optional<int>() : Values[position]; }
-	//	virtual size_t Size() const { return Values.size(); }
-	//};
-
-	//bool Compare(std::shared_ptr<Value> lhv, std::shared_ptr<Value> rhv)
-	//{
-	//	int diff = 0;
-	//	size_t counter = 0;
-
-	//	while (diff == 0)
-	//	{
-	//		diff = lhv->At(counter)
-	//	}
-	//}
-
-	//bool CompareInternal(std::shared_ptr<Value> lhv, std::shared_ptr<Value> rhv)
-	//{
-
-	//}
-
-	//struct Node
-	//{
-	//	Node() = default;
-	//	Node(int index, int value)
-	//		: Index(index), Value(value)
-	//	{
-	//	}
-
-	//	bool IsListEnd() const { return Value == -1; }
-
-	//	int Index;
-	//	int Value;
-	//};
-
-	//std::vector<int> ParseInternal(std::string str)
-	//{
-	//	std::array<char, 8> buffer; int bufferSize = 0;
-	//	std::vector<int> nodes;
-
-	//	for (char ch : str)
-	//	{
-	//		if (ch == ']')
-	//		{
-	//			nodes.push_back(-1);
-	//		}
-	//		else if (ch == ',')
-	//		{
-	//			if (bufferSize > 0)
-	//			{
-	//				buffer[bufferSize++] = '\0';
-	//				nodes.push_back(atoi(buffer.data()));
-	//				bufferSize = 0;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			buffer[bufferSize++] = ch;
-	//		}
-	//	}
-
-	//	return nodes;
-	//}
-
 	struct Value
 	{
 		int Integer;
@@ -265,32 +184,6 @@ std::string PuzzleApproach<13, 1>::RunTest(std::istream& stream)
 	return std::to_string(sum);
 }
 
-std::string PrintValue(const Day13::Value& v)
-{
-	std::stringstream sstream;
-	if (v.IsInteger)
-	{
-		sstream << v.Integer;
-	}
-	else
-	{
-		sstream << "[";
-		if (v.List.size() > 0)
-		{
-			for (const auto& val : v.List)
-			{
-				sstream << PrintValue(val) << ",";
-			}
-
-			sstream.seekp(-1, sstream.cur);
-		}
-
-		sstream << "]";
-	}
-
-	return sstream.str();
-}
-
 std::string PuzzleApproach<13, 2>::RunTest(std::istream& stream)
 {
 	auto pairs = Day13::Parse(stream);
@@ -302,23 +195,10 @@ std::string PuzzleApproach<13, 2>::RunTest(std::istream& stream)
 
 	size_t sum = 0;
 
-	for (const auto& val : pairs)
-	{
-		std::cout << PrintValue(val) << std::endl;
-	}
-
-	std::cout << "----------------------------------" << std::endl;
-
 	std::sort(pairs.begin(), pairs.end(), [](const Day13::Value& lhv, const Day13::Value& rhv)
 		{
 			return Day13::Compare(lhv, rhv) < 0;
 		});
-
-	for (const auto& val : pairs)
-	{
-		std::cout << PrintValue(val) << std::endl;
-	}
-
 
 	size_t result = 1;
 	for (int i = 0; i < pairs.size(); i++)

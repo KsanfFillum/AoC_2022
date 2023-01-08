@@ -36,6 +36,7 @@ void Run()
 		FormatFilename<puzzleBit>(filename, day);
 
 		std::ifstream file(filename);
+		assert(file.good());
 
 		std::string result = PuzzleApproach<day, puzzle>().RunTest(file);
 		std::cout << (puzzleBit == RunPuzzleTraitsConstant::RunMain ? "Puzzle" : "Test") << " [" << day << ";" << puzzle << "] answer: " << result << std::endl;
