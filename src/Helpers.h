@@ -159,6 +159,27 @@ struct VectorComparator
 	}
 };
 
+// -------------Vector3-----------------
+
+struct Vector3
+{
+	Vector3()
+		: Vector3(0, 0, 0)
+	{
+	}
+
+	Vector3(int x, int y, int z)
+		: X(x)
+		, Y(y)
+		, Z(z)
+	{
+	}
+
+	int X;
+	int Y;
+	int Z;
+};
+
 // -------------Heap-----------------
 
 template<typename T, typename TPred = std::less<>>

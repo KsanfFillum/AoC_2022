@@ -165,7 +165,8 @@
     <ClInclude Include="src\days\day15.h" />
     <ClInclude Include="src\days\day16.h" />
     <ClInclude Include="src\days\day17.h" />
-    <ClInclude Include="src\days\Helpers.h" />
+    <ClInclude Include="src\days\day18.h" />
+    <ClInclude Include="src\Helpers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
