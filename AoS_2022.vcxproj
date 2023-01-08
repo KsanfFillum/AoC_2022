@@ -160,6 +160,7 @@
     <ClInclude Include="src\days\day10.h" />
     <ClInclude Include="src\days\day11.h" />
     <ClInclude Include="src\days\day12.h" />
+    <ClInclude Include="src\days\day13.h" />
     <ClInclude Include="src\days\day14.h" />
     <ClInclude Include="src\days\day15.h" />
     <ClInclude Include="src\days\day16.h" />
