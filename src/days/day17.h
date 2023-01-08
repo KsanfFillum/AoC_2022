@@ -6,8 +6,8 @@
 #undef CURRENT_DAY
 #define CURRENT_DAY 17
 
-template<>
-constexpr char RunPuzzleTraits<17>::Value = RunPuzzleTraitsConstant::RunTest;
+//template<>
+//constexpr char RunPuzzleTraits<17>::Value = RunPuzzleTraitsConstant::RunTest;
 
 namespace Day17
 {
@@ -21,6 +21,7 @@ namespace Day17
 			, FloorRow(1)
 		{
 			Bitmask = (uint16_t*)calloc(1, sizeof(uint16_t));
+			assert(Bitmask);
 			*Bitmask = oned<uint16_t>();
 		}
 
@@ -38,8 +39,10 @@ namespace Day17
 				unsigned long nextCapacityT;
 				_BitScanReverse64(&nextCapacityT, rows);
 				size_t nextCapacity = 1LL << (1 + nextCapacityT);
-				Bitmask = (uint16_t*)realloc(Bitmask, nextCapacity * sizeof(uint16_t)); // (capacity * 2)
-				for (int i = CapacityInRows; i < nextCapacity; i++)
+				auto realloced = (uint16_t*)realloc(Bitmask, nextCapacity * sizeof(uint16_t)); // (capacity * 2)
+				assert(realloced);
+				Bitmask = realloced;
+				for (size_t i = CapacityInRows; i < nextCapacity; i++)
 				{
 					constexpr uint16_t initialValue = (oned<uint16_t>() << (RightOffset + CaveWidth)) | (oned<uint16_t>() >> (LeftOffset + CaveWidth));
 					*(Bitmask + i) = initialValue;
@@ -61,10 +64,11 @@ namespace Day17
 		uint16_t* Bitmask;
 	};
 
+	constexpr size_t shapesCount = 5;
 	uint64_t nextShape(int& lastShape)
 	{
 		// 16 bit per line, start from left-down corner
-		static uint64_t shapes[5]
+		static uint64_t shapes[shapesCount]
 		{
 			0b1111LL << 9,
 			(1LL << 11) | (0b111LL << (10 + 16)) | (1LL << (11 + 32)),
@@ -73,7 +77,7 @@ namespace Day17
 			(0b11LL << 11) | (0b11LL << (11 + 16))
 		};
 
-		lastShape = ++lastShape == 5 ? 0 : lastShape;
+		lastShape = ++lastShape == shapesCount ? 0 : lastShape;
 		return shapes[lastShape];
 	}
 
@@ -123,7 +127,7 @@ namespace Day17
 		return std::optional<size_t>();
 	}
 
-	inline uint64_t Step(uint32_t& patternIndex, const std::string& pattern, Map& map, int& shapeIndex)
+	inline uint64_t step(uint32_t& patternIndex, const std::string& pattern, Map& map, int& shapeIndex)
 	{
 		size_t row = 3 + map.FloorRow;
 		map.EnsureCapacity(5 + row);
@@ -155,99 +159,66 @@ namespace Day17
 
 		return shape;
 	}
+
+	std::string solve(std::istream& stream, const size_t requiredRocks)
+	{
+		Day17::Map map;
+
+		std::string pattern;
+		std::getline(stream, pattern);
+
+		size_t rocksFallen = 0;
+		int shapeIndex = -1;
+		unsigned int patternIndex = -1;
+		PeriodHash hash;
+		std::vector<std::tuple<uint64_t, size_t>> cachedPeriods{ { 0, 1 } };
+
+		do
+		{
+			uint64_t shape = step(patternIndex, pattern, map, shapeIndex);
+			hash.Append(shape);
+
+			if (shapeIndex == 0)
+			{
+				auto periodIndex = findPeriod(cachedPeriods, hash.GetHash());
+				if (periodIndex)
+				{
+					size_t cachedFloorRow = std::get<1>(cachedPeriods[periodIndex.value()]);
+					size_t deltaRowPerPeriod = map.FloorRow - cachedFloorRow;
+
+					size_t stepsToSimulate = (requiredRocks - (rocksFallen + 1)) % shapesCount;
+					size_t periodsLeft = (requiredRocks - (rocksFallen + stepsToSimulate + 1)) / shapesCount;
+					size_t periodsMultiplier = cachedPeriods.size() - periodIndex.value();
+
+					size_t simulateStepsLeft = stepsToSimulate + shapesCount * (periodsLeft % periodsMultiplier);
+					periodsLeft /= periodsMultiplier;
+
+					while (simulateStepsLeft-- > 0)
+					{
+						step(patternIndex, pattern, map, shapeIndex);
+					}
+
+					map.FloorRow += deltaRowPerPeriod * periodsLeft;
+					rocksFallen = requiredRocks - 1;
+				}
+				else
+				{
+					cachedPeriods.emplace_back(hash.GetHash(), map.FloorRow);
+					hash.Clear();
+				}
+			}
+		} while (++rocksFallen < requiredRocks);
+
+		return std::to_string(map.FloorRow - 1);
+	}
 }
 
 std::string PuzzleApproach<17, 1>::RunTest(std::istream& stream)
 {
-	Day17::Map map;
-
-	std::string pattern;
-	std::getline(stream, pattern);
-
-	size_t rocksFallen = 0;
-	int shapeIndex = -1;
-	unsigned int patternIndex = -1;
-	do
-	{
-		size_t row = 3 + map.FloorRow;
-		map.EnsureCapacity(5 + row);
-		uint64_t shape = Day17::nextShape(shapeIndex);
-		while (true)
-		{
-			patternIndex = ++patternIndex == pattern.size() ? 0 : patternIndex;
-			char shifting = pattern[patternIndex];
-
-			uint64_t shiftedShape = shifting == '<' ? shape << 1 : shape >> 1;
-			uint64_t& wall = *reinterpret_cast<uint64_t*>(map.GetBitmask(row));
-			if (!(shiftedShape & wall))
-			{
-				shape = shiftedShape;
-			}
-
-			uint64_t downwall = *reinterpret_cast<uint64_t*>(map.GetBitmask(--row));
-			if (shape & downwall)
-			{
-				wall = wall | shape;
-				break;
-			}
-		}
-
-		unsigned long index;
-		_BitScanReverse64(&index, shape);
-		map.FloorRow = std::max(map.FloorRow, row + 1 + (index >> 4) + 1);
-	} while (++rocksFallen < 2022);
-
-	return std::to_string(map.FloorRow - 1);
+	return Day17::solve(stream, 2022);
 }
 
 std::string PuzzleApproach<17, 2>::RunTest(std::istream& stream)
 {
-	Day17::Map map;
-
-	std::string pattern;
-	std::getline(stream, pattern);
-
-	size_t rocksFallen = 0;
-	int shapeIndex = -1;
-	unsigned int patternIndex = -1;
-	Day17::PeriodHash hash;
-	std::vector<std::tuple<uint64_t, size_t>> cachedPeriods{ { 0, 1 } };
-
-	do
-	{
-		uint64_t shape = Day17::Step(patternIndex, pattern, map, shapeIndex);
-		hash.Append(shape);
-
-		if (shapeIndex == 0)
-		{
-			auto periodIndex = Day17::findPeriod(cachedPeriods, hash.GetHash());
-			if (periodIndex)
-			{
-				size_t cachedFloorRow = std::get<1>(cachedPeriods[periodIndex.value()]);
-				size_t deltaRowPerPeriod = map.FloorRow - cachedFloorRow;
-
-				size_t stepsToSimulate = (5 - (rocksFallen + 1) % 5) % 5;
-				size_t periodsLeft = (1000000000000 - (rocksFallen + stepsToSimulate + 1)) / 5;
-				size_t periodsMultiplier = cachedPeriods.size() - periodIndex.value();
-
-				size_t simulateStepsLeft = stepsToSimulate + (periodsMultiplier - periodsLeft % periodsMultiplier) % periodsMultiplier;
-				periodsLeft /= periodsMultiplier;
-
-				while (simulateStepsLeft-- > 0)
-				{
-					Day17::Step(patternIndex, pattern, map, shapeIndex);
-				}
-
-				map.FloorRow += deltaRowPerPeriod * periodsLeft;
-				rocksFallen = 1000000000000 - 1;
-			}
-			else 
-			{
-				cachedPeriods.emplace_back(hash.GetHash(), map.FloorRow);
-				hash.Clear();
-			}
-		}
-	} while (++rocksFallen < 1000000000000);
-
-	return std::to_string(map.FloorRow - 1);
+	return Day17::solve(stream, 1000000000000);
 }
